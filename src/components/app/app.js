@@ -3,11 +3,14 @@ import React, {Component} from 'react';
 import AppHeader from '../app-header';
 import SearchPanel from '../search-panel';
 import TodoList from '../todo-list';
+import AddItem from '../add-item';
 import ItemStatusFilter from '../item-status-filter';
 
 import './app.css';
 
 export default class App extends Component {
+
+    maxId = 100;
 
     state = {
         todoData: [
@@ -32,6 +35,24 @@ export default class App extends Component {
         });
     };
 
+    addItem = (inputValue) => {
+        const newItem = {
+            label: inputValue,
+            important: false,
+            id: this.maxId++
+        };
+
+        this.setState(({todoData}) => {
+            const newArr = [
+                ...todoData,
+                newItem
+            ];
+            return {
+                todoData: newArr
+            }
+        })
+    };
+
     render() {
 
         const {todoData} = this.state;
@@ -46,6 +67,10 @@ export default class App extends Component {
                 <TodoList
                     todos={todoData}
                     onDeleted={this.deleteItem}
+                />
+                <AddItem
+                    todos={todoData}
+                    addItem={this.addItem}
                 />
             </div>
         );
